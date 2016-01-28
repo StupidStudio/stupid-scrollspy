@@ -667,7 +667,7 @@ function Scrollspy(opts){
 		for (var i = 0; i < collection.length; i++) {
 			collection[i].update();
 		};
-		
+
 		var name = document.querySelectorAll('selector');
 		// Is top
 		if(window.pageYOffset <= 0){
@@ -699,8 +699,9 @@ function Scrollspy(opts){
 		}
 	}
 
-	function add(_el){
-		var scrollspyElement = ScrollspyElement({el:_el, useCSS: opts.useCSS});
+	function add(_el, _useCSS){
+		var useCSS = _useCSS != undefined ? _useCSS : opts.useCSS;
+		var scrollspyElement = ScrollspyElement({el:_el, useCSS: useCSS});
 		Iterator.add(scrollspyElement, collection);
 		return scrollspyElement; 
 	}
