@@ -640,58 +640,125 @@ var Singleton = require('stupid-singleton');
 var Callctrl = require('stupid-callctrl');
 var Iterator = require('stupid-iterator');
 
+/**
+ * Scrollspy
+ * @constructor
+ */
 function Scrollspy(opts){
- 	var self = {};
-	var opts = opts || {};
+ 	/**
+     * @define {object} Collection of public methods.
+     */
+    var self = {};
+
+    /**
+     * @define {object} Options for the constructor 
+     */
+    var opts = opts || {};
+
+    /**
+	 * @define {Tick} Tick object
+	 */
 	var tick = opts.tick;
+
+	/**
+	 * @define {array} Collection
+	 */
 	var collection = [];
+
+	/**
+	 * @define {ScrollspyElement} Current ScrollspyElement
+	 */
 	var current;
+
+	/**
+	 * @define {ScrollspyElement} Previous ScrollspyElement
+	 */
 	var prev;
 
-	/*
-	* Private
-	*/
-
+	
+	/**
+	 * Init
+	 * Add update to ticker
+	 */
 	function init(){
 		tick.add(update);
 	}
 
+	/**
+	 * Update and loop collection
+	 */
 	function update(){
 		loopCollection();
 	}
 
+	/**
+	 * Loop collection
+	 */
 	function loopCollection(){
+		/**
+		 * If collection is empty dont loop
+		 */
 		if(!collection.length) return;
+
+		/**
+		 * Set current if not set
+		 */
 		if(!current) current = collection[0];
 
+		/**
+		 * Loop over collection to
+		 * find the items position in the window
+		 */
 		for (var i = 0; i < collection.length; i++) {
 			collection[i].update();
 		};
 
-		var name = document.querySelectorAll('selector');
-		// Is top
+		/**
+		 * If page is at top
+		 */
 		if(window.pageYOffset <= 0){
 
+			/**
+			 * Set the first item to active
+			 * if the item is visible set to current
+			 */
 			var temp = collection[0];
 			if(temp.getVisibility() > 0) current = temp;
 
-		// Is bottom
+		/**
+		 * If page is at bottom
+		 */
 		}else if(window.pageYOffset >= (document.documentElement.scrollHeight - window.innerHeight)){
 
+			/**
+			 * Set the last item to current
+			 * if the item is visible
+			 */
 			var temp = collection[collection.length - 1];
 			if(temp.getVisibility() > 0) current = temp;
 
-		// Is "mid"
+		/**
+		 * If not at top or bottom
+		 */
 		}else{
 
+			/**
+			 * Loop over the collectio to find
+			 * which item is most visible
+			 * set that item to current
+			 */
 			for (var u = 0; u < collection.length; u++) {
 				if(collection[u].getVisibility() > current.getVisibility()){
 					current = collection[u];
 				}
 			};
-
 		}
 
+		/**
+		 * If there is an new current item
+		 * then disable the previous current item
+		 * and set the new current item active
+		 */
 		if(current != prev){
 			if(prev) prev.deactive();
 			current.active();
@@ -699,25 +766,39 @@ function Scrollspy(opts){
 		}
 	}
 
-	function add(_el, _useCSS){
+	/**
+	 * Add
+	 * @example scrollspy.add(HTMLElement);
+	 * @param {HTMLElement} _HTMLElement
+	 * @param {boolean} _useCSS Use css to express visibility
+	 * @config {boolean} useCSS Sets useCSS. Uses global option
+	 * @return {ScrollspyElement} Returns a ScrollspyElement to listen on
+	 */
+	function add(_HTMLElement, _useCSS){
 		var useCSS = _useCSS != undefined ? _useCSS : opts.useCSS;
-		var scrollspyElement = ScrollspyElement({el:_el, useCSS: useCSS});
+		var scrollspyElement = ScrollspyElement({el:_HTMLElement, useCSS: useCSS});
+		/** Adds the element to the collection */
 		Iterator.add(scrollspyElement, collection);
 		return scrollspyElement; 
 	}
 
-	function remove(_el){
-		Iterator.remove(_el, collection);
+	/**
+	 * Removes element from collection
+	 */
+	function remove(_scrollspyElement){
+		Iterator.remove(_scrollspyElement, collection);
 	}
 
-	/*
-	* Public
-	*/
+	/**
+	 * Public methods
+	 * @public {function}
+	 */
 	self.add = add;
 	self.remove = remove;
-	/*
-	* Init
-	*/
+
+	/**
+	 * Init
+	 */
 
 	init();
 
@@ -734,6 +815,7 @@ function ScrollspyElement(opts){
 	var event = Event();
 	var shift = Callctrl.shift(visible, hidden);
 	var atTopCtrl = Callctrl.shift(atTop, notAtTop);
+	var atBottomCtrl = Callctrl.shift(atBottom, notAtBottom);
 
 	/*
 	* Private
@@ -767,6 +849,12 @@ function ScrollspyElement(opts){
 			atTopCtrl.beta();
 		}
 
+		if(rect.top < window.innerHeight && rect.bottom > window.innerHeight){
+			atBottomCtrl.alpha();
+		}else{
+			atBottomCtrl.beta();
+		}
+
 		if(visibility === 0){
 			shift.beta();
 		}else{
@@ -786,6 +874,16 @@ function ScrollspyElement(opts){
 	function notAtTop(){
 		if(useCSS) el.classList.remove('is-atTop');	
 		event.trigger('notAtTop', el, direction);
+	}
+
+	function atBottom(){
+		if(useCSS) el.classList.add('is-atBottom');	
+		event.trigger('atBottom', el, direction);
+	}
+
+	function notAtBottom(){
+		if(useCSS) el.classList.remove('is-atBottom');	
+		event.trigger('notAtBottom', el, direction);
 	}
 
 	function active(){
@@ -825,17 +923,21 @@ function ScrollspyElement(opts){
 	}
 
 	function addCSSDirection(){
-		el.classList.add('direction--' + direction);
+		el.classList.add('has-directionFrom' + titleCase(direction));
 	}
 
 	function addCSSPosition(){
-		if(el.classList.contains('position--top')) el.classList.remove('position--top');
-		if(el.classList.contains('position--bottom')) el.classList.remove('position--bottom');
-		el.classList.add('position--' + direction);
+		if(el.classList.contains('has-positionTop')) el.classList.remove('has-positionTop');
+		if(el.classList.contains('has-positionBottom')) el.classList.remove('has-positionBottom');
+		el.classList.add('has-position' + titleCase(direction));
 	}
 	function removeCSSDirection(){
-		if(el.classList.contains('direction--top')) el.classList.remove('direction--top');
-		if(el.classList.contains('direction--bottom')) el.classList.remove('direction--bottom');
+		if(el.classList.contains('has-directionFromTop')) el.classList.remove('has-directionFromTop');
+		if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
+	}
+
+	function titleCase(_str){
+    	return _str.replace(/\w+/g, function(_str){return _str.charAt(0).toUpperCase() + _str.substr(1).toLowerCase();});
 	}
 
 	/*
