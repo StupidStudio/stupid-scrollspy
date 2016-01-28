@@ -806,66 +806,138 @@ function Scrollspy(opts){
 }
 
 function ScrollspyElement(opts){
-	var self = {};
-	var opts = opts || {};
+	/**
+     * @define {object} Collection of public methods.
+     */
+    var self = {};
+
+    /**
+     * @define {object} Options for the constructor 
+     */
+    var opts = opts || {};
+
+    /**
+     * @define {HTMLElement} The HTMLElement
+     */
 	var el = opts.el;
+
+	/**
+	 * @define {boolean} UseCSS boolean
+	 */
 	var useCSS = opts.useCSS === true ? true : false;
+
+	/**
+	 * @define {Number} Visibility indicator
+	 */
 	var visibility = 0;
+
+	/**
+	 * @define {int} Direction indicator
+	 */
 	var direction = 0;
+
+	/**
+	 * @define {Event} Event
+	 */
 	var event = Event();
-	var shift = Callctrl.shift(visible, hidden);
+
+	/**
+	 * @define {Object} Shift objects
+	 */
+	var visibilityCtrl = Callctrl.shift(visible, hidden);
 	var atTopCtrl = Callctrl.shift(atTop, notAtTop);
 	var atBottomCtrl = Callctrl.shift(atBottom, notAtBottom);
 
-	/*
-	* Private
-	*/
+	/**
+	 * Init
+	 */
 
 	function init(){
+		/**
+		 * Calc visibility for the element
+		 */
 		calcVisibility();
+
+		/**
+		 * Add css class positions
+		 */
 		addCSSPosition();
+
+		/** Trigger initialize event */
 		event.trigger('initialize', el, direction);
 	}
 
+	/**
+	 * Update method for calculation visibility
+	 */
 	function update(){
 		calcVisibility();
 	}
 
+	/**
+	 * Calculate visibility
+	 */
 	function calcVisibility(){
+		/** Get element position in the document */
 		var rect = el.getBoundingClientRect();
 		var top = window.innerHeight - rect.top;
 		var bottom = rect.bottom;
 
+		/**
+		 * Calculate the visibilty of the element in percentages
+		 * 100% is center in the window and filling the window
+		 * 0% is off screen/window
+		 */
 		var pct = ((top < bottom) ? top : bottom) / window.innerHeight;
 		pct = parseInt(pct * 100);
 		pct = pct > 100 ? 100 : pct < 0 ? 0 : pct;
 
+		/**
+		 * Sets local variables
+		 */
 		visibility = pct;
+		/** Sets direction */
 		direction = (bottom - top) === 0 ? "center" : (bottom - top) < 0 ? "top" : "bottom";
 
+		/**
+		 * Calculates if element is at top of the window
+		 */
 		if(rect.top < 0 && rect.bottom > 0){
 			atTopCtrl.alpha();
 		}else{
 			atTopCtrl.beta();
 		}
 
+		/**
+		 * Calculates if the element is at bottom of the window
+		 */
 		if(rect.top < window.innerHeight && rect.bottom > window.innerHeight){
 			atBottomCtrl.alpha();
 		}else{
 			atBottomCtrl.beta();
 		}
 
+		/**
+		 * Toggles the visibilty
+		 */
 		if(visibility === 0){
-			shift.beta();
+			visibilityCtrl.beta();
 		}else{
-			shift.alpha();
+			visibilityCtrl.alpha();
 		}
 	}
 
+	/**
+	 * Returns the visibility
+	 * @return {Number}
+	 */
 	function getVisibility(){
 		return visibility;
 	}
 
+	/**
+	 * Adds classes to the element and trigger events
+	 */
 	function atTop(){
 		if(useCSS) el.classList.add('is-atTop');	
 		event.trigger('atTop', el, direction);
@@ -936,22 +1008,26 @@ function ScrollspyElement(opts){
 		if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
 	}
 
+	/**
+	 * Converts string to title case
+	 */
 	function titleCase(_str){
     	return _str.replace(/\w+/g, function(_str){return _str.charAt(0).toUpperCase() + _str.substr(1).toLowerCase();});
 	}
 
-	/*
-	* Public
-	*/
+	/**
+	 * Public methods
+	 * @public {function}
+	 */
 	self.update = update;
 	self.active = active;
 	self.deactive = deactive;
 	self.getVisibility = getVisibility;
 	self.on = event.on;
 
-	/*
-	* Init
-	*/
+	/**
+	 * Init
+	 */
 
 	init();
 
