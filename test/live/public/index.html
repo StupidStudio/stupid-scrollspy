@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src='js/bundle.js'></script>
+	<style>
+		body{
+			padding: 0;
+			margin: 0;	
+		}
+		.test{
+			width: 50%;
+			margin: 30px auto;
+			position: relative;
+			opacity: 0.25;
+		}
+		.test:before{
+			content:"";
+			display: block;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+		.test:after{
+			content:"";
+			display: block;
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			left:calc(50% - 50px);
+			opacity: 0;
+			font-size: 100px;
+			text-align: center;
+		}
+
+		.full{
+			height: 100vh;
+			background-color: rgba(255, 100, 0, 1);
+		}
+		.half{
+			height: 50vh;
+			background-color: rgba(100, 255, 0, 1);
+		}
+		.quar{
+			height: 33vh;
+			background-color: rgba(0, 100, 255, 1);	
+		}
+
+		.is-atTop:before{
+			border:10px solid yellow;
+		}
+		.is-active:before{
+			border:10px dotted black;
+		}
+		.is-visible{
+			opacity: 1;
+		}
+		.direction--top:after{
+			opacity: 1;
+			content:"\2193";
+			bottom: 0px;
+		}
+		.direction--bottom:after{
+			opacity: 1;
+			content:"\2191";
+		}
+	</style>
+</head>
+<body>
+	<div class="test full"></div>
+	<div class="test half"></div>
+	<div class="test quar"></div>
+	<div class="test quar"></div>
+	<div class="test quar"></div>
+	<div class="test half"></div>
+	<div class="test quar"></div>
+	<div class="test quar"></div>
+	<div class="test full"></div>
+	<div class="test half"></div>
+	<div class="test quar"></div>
+</body>
+</html>
