@@ -1,6 +1,6 @@
 {
   "name": "stupid-scrollspy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Another stupid scrollspy",
   "main": "./scrollspy.js",
   "directories": {
@@ -10,7 +10,7 @@
     "stupid-callctrl": "^1.0.1",
     "stupid-event": "^1.1.0",
     "stupid-iterator": "^1.1.0",
-    "stupid-singleton": "^1.0.0" 
+    "stupid-singleton": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "^12.0.2",
