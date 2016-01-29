@@ -29,6 +29,30 @@ function createScrollspyElements(_htmlElement){
 }
 
 ```
+## Options
+Use CSS.
+
+```javascript
+var scrollspy = require('stupid-scrollspy').getInstance({tick: tick, useCSS: true});
+
+// Use CSS local override.
+// scrollspy.add(HTMLElement, useCSS);
+var scrollspyElement = scrollspy.add(_htmlElement, false);
+
+```
+
+or:
+
+```javascript
+var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
+
+// Use CSS local override.
+// scrollspy.add(HTMLElement, useCSS);
+var scrollspyElement = scrollspy.add(_htmlElement, true);
+
+```
+
+
 ## Events
 
 ```javascript
