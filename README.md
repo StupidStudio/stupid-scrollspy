@@ -13,7 +13,7 @@ var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
 var HTMLElements = document.querySelectorAll('.htmlelement');
 
 // Loop over elements
-for (var i = 0; i < HTMLElements; i++) {
+for (var i = 0; i < HTMLElements.length; i++) {
 	// Create scrollspy elements
 	createScrollspyElements(HTMLElements[i]);
 };
