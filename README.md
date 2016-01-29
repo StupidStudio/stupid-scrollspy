@@ -38,7 +38,7 @@ var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
 var scrollspyElement = scrollspy.add(_htmlElement);
 
 // Remove from scrollspy
-scrollspy.add(scrollspyElement);
+scrollspy.remove(scrollspyElement);
 ```
 
 ## Scrollspy Element Events
