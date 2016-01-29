@@ -150,6 +150,7 @@ function Scrollspy(opts){
 	 */
 	function remove(_scrollspyElement){
 		Iterator.remove(_scrollspyElement, collection);
+		_scrollspyElement.destroy();
 	}
 
 	/**
@@ -372,6 +373,21 @@ function ScrollspyElement(opts){
 	}
 
 	/**
+	 * Destroy item
+	 */
+	function destroy(){
+		if(el.classList.contains('has-positionTop')) el.classList.remove('has-positionTop');
+		if(el.classList.contains('has-positionBottom')) el.classList.remove('has-positionBottom');
+		if(el.classList.contains('has-directionFromTop')) el.classList.remove('has-directionFromTop');
+		if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
+		if(el.classList.contains('is-atTop')) el.classList.remove('is-atTop');
+		if(el.classList.contains('is-atBottom')) el.classList.remove('is-atBottom');
+		if(el.classList.contains('is-active')) el.classList.remove('is-active');
+		if(el.classList.contains('is-visible')) el.classList.remove('is-visible');
+		self = null;
+	}
+
+	/**
 	 * Converts string to title case
 	 */
 	function titleCase(_str){
@@ -387,7 +403,7 @@ function ScrollspyElement(opts){
 	self.deactive = deactive;
 	self.getVisibility = getVisibility;
 	self.on = event.on;
-
+	self.destroy = destroy;
 	/**
 	 * Init
 	 */
