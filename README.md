@@ -76,3 +76,6 @@ scrollspyElement.on('notAtBottom', function(_el, _direction){
 	console.log('notAtBottom', _el, _direction);
 });
 ```
+
+## Tests
+See `test/live/public`.
