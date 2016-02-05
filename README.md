@@ -6,7 +6,9 @@ Another stupid scrollspy
 Scrollspy is dependen on `stupid-tick`. Add the `tick` to the scrollspy object. Scrollspy is a singleton object, so to get the object use `getInstance()`.
  
 ```javascript
-var tick = require('stupid-tick');
+var Tick = require('stupid-tick');
+var tick = Tick();
+
 var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
 
 // Query elements
