@@ -289,6 +289,21 @@ function ScrollspyElement(opts){
 		}else{
 			visibilityCtrl.alpha();
 		}
+
+		/** Updates pct scroll */
+		if(visibility != 0){
+			var o = el.offsetTop - window.innerHeight;
+			// var p = el.offsetTop - (document.documentElement.scrollHeight - window.innerHeight);
+
+			o = o < 0 ? o : 0;
+			var a = (window.innerHeight - rect.top) + o;
+			var b = (window.innerHeight + el.offsetHeight) + o;
+			var c = a / b;
+
+			console.log(a, b, o);
+
+			event.trigger('visibleProgress', el, direction, c);
+		}
 	}
 
 	/**
@@ -404,6 +419,7 @@ function ScrollspyElement(opts){
 	self.getVisibility = getVisibility;
 	self.on = event.on;
 	self.destroy = destroy;
+
 	/**
 	 * Init
 	 */

@@ -43,7 +43,7 @@ gulp.task('live-test', function(){
  */
 gulp.task('watch', function() {
 	livereload.listen();
-	gulp.watch(['./*.js', './test/live/*.js'], ['live-test']); 
+	gulp.watch(['./*.js', './test/live/*.js', '**/*.html'], ['live-test']); 
 });
 
 /*
