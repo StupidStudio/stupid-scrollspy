@@ -929,17 +929,30 @@ function ScrollspyElement(opts){
 
 		/** Updates pct scroll */
 		if(visibility != 0){
-			var o = el.offsetTop - window.innerHeight;
-			// var p = el.offsetTop - (document.documentElement.scrollHeight - window.innerHeight);
+			var x,y,z;
 
-			o = o < 0 ? o : 0;
-			var a = (window.innerHeight - rect.top) + o;
-			var b = (window.innerHeight + el.offsetHeight) + o;
-			var c = a / b;
+			var t = el.offsetTop - window.innerHeight;
+			var b = el.offsetHeight + (document.documentElement.scrollHeight - (el.offsetTop + el.offsetHeight));
+			var h = (el.offsetTop + el.offsetHeight) - (document.documentElement.scrollHeight - window.innerHeight);
+			
+			if(t < 0){
+				x = (window.innerHeight - rect.top) + t;
+				y = (window.innerHeight + el.offsetHeight) + t;
+			}else if(h > 0){
+				x = (window.innerHeight - rect.top);
+				y = b;
+			}else{
+				x = (window.innerHeight - rect.top);
+				y = (window.innerHeight + el.offsetHeight);
+			}
 
-			console.log(a, b, o);
+			console.log(h);
 
-			event.trigger('visibleProgress', el, direction, c);
+			z = x / y;
+
+			console.log('x', x, 'y', y, 't', t, 'b', b, 'h', h);
+
+			event.trigger('visibleProgress', el, direction, z);
 		}
 	}
 
@@ -1080,11 +1093,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	function createScrollspyElements(_htmlElement){
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');
+
 		scrollspyElement.on('visibleProgress', function(_el, _direction, _visible){
-			console.log("visibleProgress", _visible);
+			// console.log('visibleProgress', _visible);
 			progressHTML.style.width = _visible * 100 + '%';
 			progressHTML.style.top = _visible * 100 + '%';
-
 		});
 
 		// scrollspyElement.on('active', function(_el, _direction){
