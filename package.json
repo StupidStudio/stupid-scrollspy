@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "stupid-callctrl": "^1.0.1",
+    "stupid-changed": "^1.0.1",
     "stupid-event": "^1.1.0",
     "stupid-iterator": "^1.1.0",
     "stupid-singleton": "^1.0.0"

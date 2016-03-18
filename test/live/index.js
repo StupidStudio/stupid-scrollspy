@@ -11,10 +11,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');
 
-		scrollspyElement.on('visibleProgress', function(_el, _direction, _visible){
-			// console.log('visibleProgress', _visible);
-			progressHTML.style.width = _visible * 100 + '%';
-			progressHTML.style.top = _visible * 100 + '%';
+		scrollspyElement.on('progress', function(_el, _direction, _progress){
+			// console.log('visibleProgress', _progress);
+			var v = _progress;
+			// v = scrollspy.map(_progress, 0.2, 0.8);
+			progressHTML.style.width = v * 100 + '%';
+			progressHTML.style.top = v * 100 + '%';
+			console.log(_direction, v);
 		});
 
 		// scrollspyElement.on('active', function(_el, _direction){

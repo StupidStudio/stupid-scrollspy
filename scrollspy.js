@@ -2,6 +2,7 @@ var Event = require('stupid-event');
 var Singleton = require('stupid-singleton');
 var Callctrl = require('stupid-callctrl');
 var Iterator = require('stupid-iterator');
+var Changed = require('stupid-changed');
 
 /**
  * Scrollspy
@@ -154,11 +155,24 @@ function Scrollspy(opts){
 	}
 
 	/**
+	 * Map
+	 */
+
+	function map (_value, _istart, _istop, _ostart, _ostop) {
+		var ostart = _ostart === undefined ? 0 : _ostart;
+		var ostop = _ostop === undefined ? 1 : _ostop;
+		if(_value < _istart) return ostart;
+		if(_value > _istop) return ostop;
+		return ostart + (ostop - ostart) * ((_value - _istart) / (_istop - _istart));
+	}
+
+	/**
 	 * Public methods
 	 * @public {function}
 	 */
 	self.add = add;
 	self.remove = remove;
+	self.map = map;
 
 	/**
 	 * Init
@@ -204,6 +218,11 @@ function ScrollspyElement(opts){
 	 * @define {Event} Event
 	 */
 	var event = Event();
+
+	/**
+	 * @define {Changed} Changed
+	 */
+	var changed = Changed();
 
 	/**
 	 * @define {Object} Shift objects
@@ -292,31 +311,54 @@ function ScrollspyElement(opts){
 
 		/** Updates pct scroll */
 		if(visibility != 0){
-			var x,y,z;
 
+			/** Setup variables */
+			var x, y, z;
+
+			/** If the element is at top */
 			var t = el.offsetTop - window.innerHeight;
-			var b = el.offsetHeight + (document.documentElement.scrollHeight - (el.offsetTop + el.offsetHeight));
-			var h = (el.offsetTop + el.offsetHeight) - (document.documentElement.scrollHeight - window.innerHeight);
-			
+
+			/** Check if element is at bottom */
+			var b = (el.offsetTop + el.offsetHeight) - (document.documentElement.scrollHeight - window.innerHeight);
+
+			/**
+			 * If the element is in top window from the start
+			 * compensate for that
+			 */
 			if(t < 0){
 				x = (window.innerHeight - rect.top) + t;
 				y = (window.innerHeight + el.offsetHeight) + t;
-			}else if(h > 0){
+				
+			/**
+			 * If the element is in the bottom window
+			 * compensate for that
+			 */
+			}else if(b > 0){
 				x = (window.innerHeight - rect.top);
-				y = b;
+				y = el.offsetHeight + (document.documentElement.scrollHeight - (el.offsetTop + el.offsetHeight));
+
+			/**
+			 * Default progress calc
+			 */
 			}else{
 				x = (window.innerHeight - rect.top);
 				y = (window.innerHeight + el.offsetHeight);
 			}
 
-			console.log(h);
-
+			/** Calc the progress */
 			z = x / y;
 
-			console.log('x', x, 'y', y, 't', t, 'b', b, 'h', h);
-
-			event.trigger('visibleProgress', el, direction, z);
+			/** Trigger the event */
+			changed.trigger(z, progress);
+			
 		}
+	}
+
+	/**
+	 * Trigger the progress event
+	 */
+	function progress(_value){
+		event.trigger('progress', el, direction, _value);	
 	}
 
 	/**
