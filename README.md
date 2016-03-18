@@ -55,7 +55,7 @@ var scrollspyElement = scrollspy.add(_htmlElement, true);
 ```
 
 
-## Events
+## Methods
 
 ```javascript
 var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
@@ -65,11 +65,30 @@ var scrollspyElement = scrollspy.add(_htmlElement);
 
 // Remove from scrollspy
 scrollspy.remove(scrollspyElement);
+
+```
+
+### Map Method
+The progress event starts when the element is visible and ends when it is not visible. That is show by the progress value that goes from 0 to 1. But if you want that value to start and/or end sooner, you can use the map method.
+
+When the progress value is a 0.2 the map method maps it to 0. And when the progress value is at 0.8 it maps it to 1. You still get a value range from 0 to 1.
+
+```javascript
+// Map progress value
+scrollspyElement.on('progress', function(_el, _direction, _progress){
+	var mapped = scrollspy.map(_progress, 0.2, 0.8);
+});
+
 ```
 
 ## Scrollspy Element Events
 
 ```javascript
+// Progress
+scrollspyElement.on('progress', function(_el, _direction, _progress){
+	console.log('progress', _el, _direction, _progress);
+});
+
 // Active
 scrollspyElement.on('active', function(_el, _direction){
 	console.log('active', _el, _direction);
