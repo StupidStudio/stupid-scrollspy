@@ -1122,31 +1122,39 @@ function ScrollspyElement(opts){
 	}
 
 	function addCSSDirection(){
-		el.classList.add('has-directionFrom' + titleCase(direction));
+		if(useCSS){
+			el.classList.add('has-directionFrom' + titleCase(direction));
+		}
 	}
 
 	function addCSSPosition(){
-		if(el.classList.contains('has-positionTop')) el.classList.remove('has-positionTop');
-		if(el.classList.contains('has-positionBottom')) el.classList.remove('has-positionBottom');
-		el.classList.add('has-position' + titleCase(direction));
+		if(useCSS){
+			if(el.classList.contains('has-positionTop')) el.classList.remove('has-positionTop');
+			if(el.classList.contains('has-positionBottom')) el.classList.remove('has-positionBottom');
+			el.classList.add('has-position' + titleCase(direction));
+		}
 	}
 	function removeCSSDirection(){
-		if(el.classList.contains('has-directionFromTop')) el.classList.remove('has-directionFromTop');
-		if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
+		if(useCSS){
+			if(el.classList.contains('has-directionFromTop')) el.classList.remove('has-directionFromTop');
+			if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
+		}
 	}
 
 	/**
 	 * Destroy item
 	 */
 	function destroy(){
-		if(el.classList.contains('has-positionTop')) el.classList.remove('has-positionTop');
-		if(el.classList.contains('has-positionBottom')) el.classList.remove('has-positionBottom');
-		if(el.classList.contains('has-directionFromTop')) el.classList.remove('has-directionFromTop');
-		if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
-		if(el.classList.contains('is-atTop')) el.classList.remove('is-atTop');
-		if(el.classList.contains('is-atBottom')) el.classList.remove('is-atBottom');
-		if(el.classList.contains('is-active')) el.classList.remove('is-active');
-		if(el.classList.contains('is-visible')) el.classList.remove('is-visible');
+		if(useCSS){
+			if(el.classList.contains('has-positionTop')) el.classList.remove('has-positionTop');
+			if(el.classList.contains('has-positionBottom')) el.classList.remove('has-positionBottom');
+			if(el.classList.contains('has-directionFromTop')) el.classList.remove('has-directionFromTop');
+			if(el.classList.contains('has-directionFromBottom')) el.classList.remove('has-directionFromBottom');
+			if(el.classList.contains('is-atTop')) el.classList.remove('is-atTop');
+			if(el.classList.contains('is-atBottom')) el.classList.remove('is-atBottom');
+			if(el.classList.contains('is-active')) el.classList.remove('is-active');
+			if(el.classList.contains('is-visible')) el.classList.remove('is-visible');
+		}
 		self = null;
 	}
 
