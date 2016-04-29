@@ -224,6 +224,12 @@ function ScrollspyElement(opts){
 	 */
 	var changed = Changed();
 
+
+	/**
+	 * @define {number} OffsetTop Position
+	 */
+	var offsetTop = getAbsoluteOffsetTop(el);
+
 	/**
 	 * @define {Object} Shift objects
 	 */
@@ -316,10 +322,10 @@ function ScrollspyElement(opts){
 			var x, y, z;
 
 			/** If the element is at top */
-			var t = el.offsetTop - window.innerHeight;
+			var t = offsetTop - window.innerHeight;
 
 			/** Check if element is at bottom */
-			var b = (el.offsetTop + el.offsetHeight) - (document.documentElement.scrollHeight - window.innerHeight);
+			var b = (offsetTop + el.offsetHeight) - (document.documentElement.scrollHeight - window.innerHeight);
 
 			/**
 			 * If the element is in top window from the start
@@ -335,7 +341,7 @@ function ScrollspyElement(opts){
 			 */
 			}else if(b > 0){
 				x = (window.innerHeight - rect.top);
-				y = el.offsetHeight + (document.documentElement.scrollHeight - (el.offsetTop + el.offsetHeight));
+				y = el.offsetHeight + (document.documentElement.scrollHeight - (offsetTop + el.offsetHeight));
 
 			/**
 			 * Default progress calc
@@ -352,6 +358,15 @@ function ScrollspyElement(opts){
 			changed.trigger(z, progress);
 			
 		}
+	}
+
+	/**
+	 * Get Absolute OffsetTop of Element
+	 */
+	function getAbsoluteOffsetTop(_el, _value){
+		var value = _el.offsetTop + (_value || 0);
+		if(_el === document.body) return value;
+		return getAbsoluteOffsetTop(_el.offsetParent, value);
 	}
 
 	/**
