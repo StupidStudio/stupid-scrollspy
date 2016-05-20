@@ -9,10 +9,15 @@
 			padding: 0;
 			margin: 30px;	
 		}
-
+		.left,
+		.right{
+			float: left;
+			width: 50%;
+			padding: rem(15)
+		}
 		/* Test object */
 		.test{
-			width: 50%;
+			width: 100%;
 			margin: 15px auto;
 			position: relative;
 			opacity: 0.25;
@@ -97,22 +102,53 @@
 		#test{
 			background-color: yellow;
 		}
+
+		.block{
+			height: 400px;
+		}
+		.block-large{
+			height: 600px;
+		}
 	</style>
 </head>
 <body>
-	<div class="test half"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test half"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test full v"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test half"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test full"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test half"><div class="direction"></div><div class="progress"></div></div>
-	<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+	<div class="left">
+		<div class="block-large"></div>
+
+		<div class="inside">
+			<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test full v"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test full"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+			<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		</div>
+		
+		<div class="block"></div>
+	</div>
+	<div class="right">
+		<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test full v"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test full"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test half"><div class="direction"></div><div class="progress"></div></div>
+		<div class="test quar"><div class="direction"></div><div class="progress"></div></div>
+	</div>
 </body>
 </html>
