@@ -831,9 +831,19 @@ function Scrollspy(opts){
 	 * @config {boolean} useCSS Sets useCSS. Uses global option
 	 * @return {ScrollspyElement} Returns a ScrollspyElement to listen on
 	 */
-	function add(_HTMLElement, _useCSS){
-		var useCSS = _useCSS != undefined ? _useCSS : opts.useCSS;
-		var scrollspyElement = ScrollspyElement({el:_HTMLElement, useCSS: useCSS});
+	function add(_HTMLElement, _opts){
+		var options = _opts || {};
+		var useCSS = options.useCSS != undefined ? options.useCSS : opts.useCSS;
+		var compensateTop = options.compensateTop != undefined ? options.compensateTop : opts.compensateTop;
+		var compensateBottom = options.compensateBottom != undefined ? options.compensateBottom : opts.compensateBottom;
+
+		var scrollspyElement = ScrollspyElement({
+			el:_HTMLElement, 
+			useCSS: useCSS,
+			compensateTop: compensateTop,
+			compensateBottom: compensateBottom
+		});
+
 		/** Adds the element to the collection */
 		Iterator.add(scrollspyElement, collection);
 		return scrollspyElement; 
@@ -896,6 +906,12 @@ function ScrollspyElement(opts){
 	 * @define {boolean} UseCSS boolean
 	 */
 	var useCSS = opts.useCSS === true ? true : false;
+
+	/**
+	 * @define {boolean} Compensate for top and bottom element
+	 */	
+	var compensateTop = opts.compensateTop === true ? true : false;
+	var compensateBottom = opts.compensateBottom === true ? true : false;
 
 	/**
 	 * @define {Number} Visibility indicator
@@ -978,6 +994,7 @@ function ScrollspyElement(opts){
 		 * Sets local variables
 		 */
 		visibility = pct;
+
 		/** Sets direction */
 		direction = (bottom - top) === 0 ? "center" : (bottom - top) < 0 ? "top" : "bottom";
 
@@ -1024,7 +1041,7 @@ function ScrollspyElement(opts){
 			 * If the element is in top window from the start
 			 * compensate for that
 			 */
-			if(t < 0){
+			if(compensateTop && t < 0){
 				x = (window.innerHeight - rect.top) + t;
 				y = (window.innerHeight + el.offsetHeight) + t;
 				
@@ -1032,7 +1049,7 @@ function ScrollspyElement(opts){
 			 * If the element is in the bottom window
 			 * compensate for that
 			 */
-			}else if(b > 0){
+			}else if(compensateBottom && b > 0){
 				x = (window.innerHeight - rect.top);
 				y = el.offsetHeight + (document.documentElement.scrollHeight - (offsetTop + el.offsetHeight));
 
@@ -1203,7 +1220,12 @@ function ScrollspyElement(opts){
 module.exports = Singleton(Scrollspy);
 },{"stupid-callctrl":1,"stupid-changed":2,"stupid-event":3,"stupid-iterator":4,"stupid-singleton":5}],8:[function(require,module,exports){
 var tick = require('../tick').getInstance();
-var scrollspy = require('../../scrollspy').getInstance({tick: tick, useCSS: true});
+var scrollspy = require('../../scrollspy').getInstance({
+	tick: tick, 
+	useCSS: true,
+	compensateTop: false,
+	compensateBottom: false
+});
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	var test = document.querySelectorAll('.test');

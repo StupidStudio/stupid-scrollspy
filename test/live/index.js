@@ -1,5 +1,10 @@
 var tick = require('../tick').getInstance();
-var scrollspy = require('../../scrollspy').getInstance({tick: tick, useCSS: true});
+var scrollspy = require('../../scrollspy').getInstance({
+	tick: tick, 
+	useCSS: true,
+	compensateTop: false,
+	compensateBottom: false
+});
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	var test = document.querySelectorAll('.test');
