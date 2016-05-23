@@ -1,5 +1,4 @@
 var Event = require('stupid-event');
-var Singleton = require('stupid-singleton');
 var Callctrl = require('stupid-callctrl');
 var Iterator = require('stupid-iterator');
 var Changed = require('stupid-changed');
@@ -524,4 +523,4 @@ function ScrollspyElement(opts){
 	return self;
 }
 
-module.exports = Singleton(Scrollspy);
+module.exports = Scrollspy;
