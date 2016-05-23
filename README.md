@@ -9,7 +9,8 @@ Scrollspy is dependen on `stupid-tick`. Add the `tick` to the scrollspy object. 
 var Tick = require('stupid-tick');
 var tick = Tick();
 
-var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
+var Scrollspy = require('stupid-scrollspy');
+var scrollspy = Scrollspy({tick: tick});
 
 // Query elements
 var HTMLElements = document.querySelectorAll('.htmlelement');
@@ -31,26 +32,60 @@ function createScrollspyElements(_htmlElement){
 }
 
 ```
-## Options
-Use CSS.
+## Options Global vs Local
+Global:
 
 ```javascript
-var scrollspy = require('stupid-scrollspy').getInstance({tick: tick, useCSS: true});
+var Tick = require('stupid-tick');
+var tick = Tick();
+
+var Scrollspy = require('stupid-scrollspy');
+var scrollspy = Scrollspy({
+	tick: tick, 
+	useCSS: true,
+	compensateTop: true,
+	compensateBottom: true
+});
 
 // Use CSS local override.
-// scrollspy.add(HTMLElement, useCSS);
-var scrollspyElement = scrollspy.add(_htmlElement, false);
+// scrollspy.add(HTMLElement, options);
+var scrollspyElement = scrollspy.add(_htmlElement);
 
 ```
 
-or:
+Local:
 
 ```javascript
-var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
+var Tick = require('stupid-tick');
+var tick = Tick();
+
+var Scrollspy = require('stupid-scrollspy');
+var scrollspy = Scrollspy({tick: tick});
 
 // Use CSS local override.
-// scrollspy.add(HTMLElement, useCSS);
-var scrollspyElement = scrollspy.add(_htmlElement, true);
+// scrollspy.add(HTMLElement, options);
+var scrollspyElement = scrollspy.add(_htmlElement,{
+	useCSS: true,
+	compensateTop: true,
+	compensateBottom: true
+});
+
+```
+
+## Compensate
+
+The compensate options make the first and last child have the progress from 0 to 100 even though its progress is otherwise. It maps it so you can control a animation from 0 to 100.
+
+```
+var Tick = require('stupid-tick');
+var tick = Tick();
+
+var Scrollspy = require('stupid-scrollspy');
+var scrollspy = Scrollspy({
+	tick: tick, 
+	compensateTop: true,
+	compensateBottom: true
+});
 
 ```
 
@@ -58,8 +93,6 @@ var scrollspyElement = scrollspy.add(_htmlElement, true);
 ## Methods
 
 ```javascript
-var scrollspy = require('stupid-scrollspy').getInstance({tick: tick});
-
 // Add to scrollspy
 var scrollspyElement = scrollspy.add(_htmlElement);
 
