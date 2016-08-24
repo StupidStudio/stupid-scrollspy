@@ -26,12 +26,27 @@ function createScrollspyElements(_htmlElement){
 	var scrollspyElement = scrollspy.add(_htmlElement);
 	
 	// Listen on the scrollspy element
-	scrollspyElement.on('active', function(_el, _direction){
-		console.log('active', _el, _direction);
+	scrollspyElement.on('active', function(e){
+		console.log('active', e.el, e.direction);
 	});
 }
 
 ```
+
+## ScrollSpy Methods
+
+```
+var Scrollspy = require('stupid-scrollspy');
+var scrollspy = Scrollspy({tick: tick});
+
+// remove all element from the scrollspy
+scrollspy.flush();
+
+// destroy scrollspy
+scrollspy.destroy();
+
+```
+
 ## Options Global vs Local
 Global:
 
@@ -108,8 +123,8 @@ When the progress value is a 0.2 the map method maps it to 0. And when the progr
 
 ```javascript
 // Map progress value
-scrollspyElement.on('progress', function(_el, _direction, _progress){
-	var mapped = scrollspy.map(_progress, 0.2, 0.8);
+scrollspyElement.on('progress', function(e){
+	var mapped = scrollspy.map(e.progress, 0.2, 0.8);
 });
 
 ```
@@ -118,40 +133,40 @@ scrollspyElement.on('progress', function(_el, _direction, _progress){
 
 ```javascript
 // Progress
-scrollspyElement.on('progress', function(_el, _direction, _progress){
-	console.log('progress', _el, _direction, _progress);
+scrollspyElement.on('progress', function(e){
+	console.log('progress', e.el, e.direction, e.progress);
 });
 
 // Active
-scrollspyElement.on('active', function(_el, _direction){
-	console.log('active', _el, _direction);
+scrollspyElement.on('active', function(e){
+	console.log('active', e.el, e.direction);
 });
-scrollspyElement.on('deactive', function(_el, _direction){
-	console.log('deactive', _el, _direction);
+scrollspyElement.on('deactive', function(e){
+	console.log('deactive', e.el, e.direction);
 });
 
 // Visibility
-scrollspyElement.on('visible', function(_el, _direction){
-	console.log('visible', _el, _direction);
+scrollspyElement.on('visible', function(e){
+	console.log('visible', e.el, e.direction);
 });
-scrollspyElement.on('hidden', function(_el, _direction){
-	console.log('hidden', _el, _direction);
+scrollspyElement.on('hidden', function(e){
+	console.log('hidden', e.el, e.direction);
 });
 
 // Top of screen
-scrollspyElement.on('atTop', function(_el, _direction){
-	console.log('atTop', _el, _direction);
+scrollspyElement.on('atTop', function(e){
+	console.log('atTop', e.el, e.direction);
 });
-scrollspyElement.on('notAtTop', function(_el, _direction){
-	console.log('notAtTop', _el, _direction);
+scrollspyElement.on('notAtTop', function(e){
+	console.log('notAtTop', e.el, e.direction);
 });
 
 // Bottom of screen
-scrollspyElement.on('atBottom', function(_el, _direction){
-	console.log('atBottom', _el, _direction);
+scrollspyElement.on('atBottom', function(e){
+	console.log('atBottom', e.el, e.direction);
 });
-scrollspyElement.on('notAtBottom', function(_el, _direction){
-	console.log('notAtBottom', _el, _direction);
+scrollspyElement.on('notAtBottom', function(e){
+	console.log('notAtBottom', e.el, e.direction);
 });
 ```
 
