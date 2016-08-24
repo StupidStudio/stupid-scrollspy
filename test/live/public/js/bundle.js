@@ -1278,6 +1278,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		createScrollspyElements(test[i]);
 	};
 	
+	setTimeout(function(){
+		scrollspy.flush();
+	}, 1000)
 	function createScrollspyElements(_htmlElement){
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');

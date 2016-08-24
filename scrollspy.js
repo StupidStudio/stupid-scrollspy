@@ -167,6 +167,9 @@ function Scrollspy(opts){
 	 * Clean all elements from collection
 	 */
 	function flush () {
+		for (var i = 0; i < collection.length; i++) {
+			collection[i].destroy();
+		}
 		collection = [];
 	}
 
@@ -397,6 +400,7 @@ function ScrollspyElement(opts){
 	 * Get Absolute OffsetTop of Element
 	 */
 	function getAbsoluteOffsetTop(_el, _value){
+		if(!_el) return value;
 		var value = _el.offsetTop + (_value || 0);
 		if(_el === document.body) return value;
 		return getAbsoluteOffsetTop(_el.offsetParent, value);
