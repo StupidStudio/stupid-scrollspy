@@ -1,5 +1,6 @@
 var tick = require('../tick').getInstance();
-var scrollspy = require('../../scrollspy').getInstance({
+var ScrollSpy = require('../../scrollspy');
+var scrollspy = ScrollSpy({
 	tick: tick, 
 	useCSS: true,
 	compensateTop: false,
@@ -11,18 +12,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	for (var i = 0; i < test.length; i++) {
 		createScrollspyElements(test[i]);
 	};
-
+	
 	function createScrollspyElements(_htmlElement){
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');
 
-		scrollspyElement.on('progress', function(_el, _direction, _progress){
+		scrollspyElement.on('progress', function(e){
 			// console.log('visibleProgress', _progress);
-			var v = _progress;
+			var v = e.progress;
 			// v = scrollspy.map(_progress, 0.2, 0.8);
 			progressHTML.style.width = v * 100 + '%';
 			progressHTML.style.top = v * 100 + '%';
-			console.log(_direction, v);
+			console.log(e.direction, v);
 		});
 
 		// scrollspyElement.on('active', function(_el, _direction){

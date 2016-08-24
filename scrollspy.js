@@ -163,10 +163,25 @@ function Scrollspy(opts){
 		_scrollspyElement.destroy();
 	}
 
+	/** 
+	 * Clean all elements from collection
+	 */
+	function flush () {
+		collection = [];
+	}
+
+	/**
+	 * Destroy element
+	 */
+	function destroy () {
+		tick.remove(update);
+		flush();
+		self = null;
+	}
+
 	/**
 	 * Map
 	 */
-
 	function map (_value, _istart, _istop, _ostart, _ostop) {
 		var ostart = _ostart === undefined ? 0 : _ostart;
 		var ostop = _ostop === undefined ? 1 : _ostop;
@@ -182,6 +197,8 @@ function Scrollspy(opts){
 	self.add = add;
 	self.remove = remove;
 	self.map = map;
+	self.flush = flush;
+	self.destroy = destroy;
 
 	/**
 	 * Init
@@ -389,7 +406,11 @@ function ScrollspyElement(opts){
 	 * Trigger the progress event
 	 */
 	function progress(_value){
-		event.trigger('progress', el, direction, _value);	
+		event.trigger('progress', {
+			el: el,
+			direction: direction,
+			progress: _value
+		});	
 	}
 
 	/**
@@ -405,22 +426,34 @@ function ScrollspyElement(opts){
 	 */
 	function atTop(){
 		if(useCSS) el.classList.add('is-atTop');	
-		event.trigger('atTop', el, direction);
+		event.trigger('atTop', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function notAtTop(){
 		if(useCSS) el.classList.remove('is-atTop');	
-		event.trigger('notAtTop', el, direction);
+		event.trigger('notAtTop', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function atBottom(){
 		if(useCSS) el.classList.add('is-atBottom');	
-		event.trigger('atBottom', el, direction);
+		event.trigger('atBottom', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function notAtBottom(){
 		if(useCSS) el.classList.remove('is-atBottom');	
-		event.trigger('notAtBottom', el, direction);
+		event.trigger('notAtBottom', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function active(){
@@ -430,7 +463,10 @@ function ScrollspyElement(opts){
 			addCSSDirection();
 		} 
 
-		event.trigger('active', el, direction);
+		event.trigger('active', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function deactive(){
@@ -438,7 +474,10 @@ function ScrollspyElement(opts){
 			el.classList.remove('is-active');	
 			removeCSSDirection();
 		}
-		event.trigger('deactive', el, direction);
+		event.trigger('deactive', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function visible(){
@@ -447,7 +486,10 @@ function ScrollspyElement(opts){
 			removeCSSDirection();
 			addCSSDirection();
 		}
-		event.trigger('visible', el, direction);
+		event.trigger('visible', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function hidden(){
@@ -456,7 +498,10 @@ function ScrollspyElement(opts){
 			removeCSSDirection();
 			addCSSPosition();
 		}
-		event.trigger('hidden', el, direction);
+		event.trigger('hidden', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function addCSSDirection(){

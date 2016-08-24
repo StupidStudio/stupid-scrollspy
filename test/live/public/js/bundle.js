@@ -692,7 +692,6 @@ function Tick(opts) {
 module.exports = Tick;
 },{"stupid-callctrl":1}],7:[function(require,module,exports){
 var Event = require('stupid-event');
-var Singleton = require('stupid-singleton');
 var Callctrl = require('stupid-callctrl');
 var Iterator = require('stupid-iterator');
 var Changed = require('stupid-changed');
@@ -857,10 +856,25 @@ function Scrollspy(opts){
 		_scrollspyElement.destroy();
 	}
 
+	/** 
+	 * Clean all elements from collection
+	 */
+	function flush () {
+		collection = [];
+	}
+
+	/**
+	 * Destroy element
+	 */
+	function destroy () {
+		tick.remove(update);
+		flush();
+		self = null;
+	}
+
 	/**
 	 * Map
 	 */
-
 	function map (_value, _istart, _istop, _ostart, _ostop) {
 		var ostart = _ostart === undefined ? 0 : _ostart;
 		var ostop = _ostop === undefined ? 1 : _ostop;
@@ -876,6 +890,8 @@ function Scrollspy(opts){
 	self.add = add;
 	self.remove = remove;
 	self.map = map;
+	self.flush = flush;
+	self.destroy = destroy;
 
 	/**
 	 * Init
@@ -1083,7 +1099,11 @@ function ScrollspyElement(opts){
 	 * Trigger the progress event
 	 */
 	function progress(_value){
-		event.trigger('progress', el, direction, _value);	
+		event.trigger('progress', {
+			el: el,
+			direction: direction,
+			progress: _value
+		});	
 	}
 
 	/**
@@ -1099,22 +1119,34 @@ function ScrollspyElement(opts){
 	 */
 	function atTop(){
 		if(useCSS) el.classList.add('is-atTop');	
-		event.trigger('atTop', el, direction);
+		event.trigger('atTop', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function notAtTop(){
 		if(useCSS) el.classList.remove('is-atTop');	
-		event.trigger('notAtTop', el, direction);
+		event.trigger('notAtTop', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function atBottom(){
 		if(useCSS) el.classList.add('is-atBottom');	
-		event.trigger('atBottom', el, direction);
+		event.trigger('atBottom', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function notAtBottom(){
 		if(useCSS) el.classList.remove('is-atBottom');	
-		event.trigger('notAtBottom', el, direction);
+		event.trigger('notAtBottom', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function active(){
@@ -1124,7 +1156,10 @@ function ScrollspyElement(opts){
 			addCSSDirection();
 		} 
 
-		event.trigger('active', el, direction);
+		event.trigger('active', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function deactive(){
@@ -1132,7 +1167,10 @@ function ScrollspyElement(opts){
 			el.classList.remove('is-active');	
 			removeCSSDirection();
 		}
-		event.trigger('deactive', el, direction);
+		event.trigger('deactive', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function visible(){
@@ -1141,7 +1179,10 @@ function ScrollspyElement(opts){
 			removeCSSDirection();
 			addCSSDirection();
 		}
-		event.trigger('visible', el, direction);
+		event.trigger('visible', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function hidden(){
@@ -1150,7 +1191,10 @@ function ScrollspyElement(opts){
 			removeCSSDirection();
 			addCSSPosition();
 		}
-		event.trigger('hidden', el, direction);
+		event.trigger('hidden', {
+			el: el, 
+			direction: direction
+		});
 	}
 
 	function addCSSDirection(){
@@ -1217,10 +1261,11 @@ function ScrollspyElement(opts){
 	return self;
 }
 
-module.exports = Singleton(Scrollspy);
-},{"stupid-callctrl":1,"stupid-changed":2,"stupid-event":3,"stupid-iterator":4,"stupid-singleton":5}],8:[function(require,module,exports){
+module.exports = Scrollspy;
+},{"stupid-callctrl":1,"stupid-changed":2,"stupid-event":3,"stupid-iterator":4}],8:[function(require,module,exports){
 var tick = require('../tick').getInstance();
-var scrollspy = require('../../scrollspy').getInstance({
+var ScrollSpy = require('../../scrollspy');
+var scrollspy = ScrollSpy({
 	tick: tick, 
 	useCSS: true,
 	compensateTop: false,
@@ -1232,18 +1277,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	for (var i = 0; i < test.length; i++) {
 		createScrollspyElements(test[i]);
 	};
-
+	
 	function createScrollspyElements(_htmlElement){
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');
 
-		scrollspyElement.on('progress', function(_el, _direction, _progress){
+		scrollspyElement.on('progress', function(e){
 			// console.log('visibleProgress', _progress);
-			var v = _progress;
+			var v = e.progress;
 			// v = scrollspy.map(_progress, 0.2, 0.8);
 			progressHTML.style.width = v * 100 + '%';
 			progressHTML.style.top = v * 100 + '%';
-			console.log(_direction, v);
+			console.log(e.direction, v);
 		});
 
 		// scrollspyElement.on('active', function(_el, _direction){
