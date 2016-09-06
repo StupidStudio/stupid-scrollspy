@@ -38,7 +38,16 @@ function Scrollspy(opts){
 	 */
 	var prev;
 
-	
+	/**
+	 * @define {Event} Event
+	 */
+	var event = Event();
+
+	/**
+	 * @define {Changed} Changed
+	 */
+	var changed = Changed();
+
 	/**
 	 * Init
 	 * Add update to ticker
@@ -127,6 +136,16 @@ function Scrollspy(opts){
 			current.active();
 			prev = current;
 		}
+
+		/**
+		 *  Emit window scrollprogress
+		 */
+		var windowProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+		changed.trigger(windowProgress, function (value) {
+			event.trigger('progress', {
+				progress: value
+			})
+		})
 	}
 
 	/**
@@ -202,6 +221,7 @@ function Scrollspy(opts){
 	self.map = map;
 	self.flush = flush;
 	self.destroy = destroy;
+	self.on = event.on;
 
 	/**
 	 * Init

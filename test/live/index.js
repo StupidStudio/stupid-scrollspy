@@ -3,19 +3,19 @@ var ScrollSpy = require('../../scrollspy');
 var scrollspy = ScrollSpy({
 	tick: tick, 
 	useCSS: true,
-	compensateTop: false,
-	compensateBottom: false
+	compensateTop: true,
+	compensateBottom: true
 });
+scrollspy.on('progress', function (e) {
+	console.log(e.progress)
+})
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	var test = document.querySelectorAll('.test');
 	for (var i = 0; i < test.length; i++) {
 		createScrollspyElements(test[i]);
 	};
-	
-	setTimeout(function(){
-		scrollspy.flush();
-	}, 1000)
+
 	function createScrollspyElements(_htmlElement){
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			// v = scrollspy.map(_progress, 0.2, 0.8);
 			progressHTML.style.width = v * 100 + '%';
 			progressHTML.style.top = v * 100 + '%';
-			console.log(e.direction, v);
+			// console.log(e.direction, v);
 		});
 
 		// scrollspyElement.on('active', function(_el, _direction){

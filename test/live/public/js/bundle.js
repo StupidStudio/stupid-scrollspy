@@ -731,7 +731,16 @@ function Scrollspy(opts){
 	 */
 	var prev;
 
-	
+	/**
+	 * @define {Event} Event
+	 */
+	var event = Event();
+
+	/**
+	 * @define {Changed} Changed
+	 */
+	var changed = Changed();
+
 	/**
 	 * Init
 	 * Add update to ticker
@@ -820,6 +829,16 @@ function Scrollspy(opts){
 			current.active();
 			prev = current;
 		}
+
+		/**
+		 *  Emit window scrollprogress
+		 */
+		var windowProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+		changed.trigger(windowProgress, function (value) {
+			event.trigger('progress', {
+				progress: value
+			})
+		})
 	}
 
 	/**
@@ -860,6 +879,9 @@ function Scrollspy(opts){
 	 * Clean all elements from collection
 	 */
 	function flush () {
+		for (var i = 0; i < collection.length; i++) {
+			collection[i].destroy();
+		}
 		collection = [];
 	}
 
@@ -892,6 +914,7 @@ function Scrollspy(opts){
 	self.map = map;
 	self.flush = flush;
 	self.destroy = destroy;
+	self.on = event.on;
 
 	/**
 	 * Init
@@ -1090,6 +1113,7 @@ function ScrollspyElement(opts){
 	 * Get Absolute OffsetTop of Element
 	 */
 	function getAbsoluteOffsetTop(_el, _value){
+		if(!_el) return value;
 		var value = _el.offsetTop + (_value || 0);
 		if(_el === document.body) return value;
 		return getAbsoluteOffsetTop(_el.offsetParent, value);
@@ -1268,19 +1292,19 @@ var ScrollSpy = require('../../scrollspy');
 var scrollspy = ScrollSpy({
 	tick: tick, 
 	useCSS: true,
-	compensateTop: false,
-	compensateBottom: false
+	compensateTop: true,
+	compensateBottom: true
 });
+scrollspy.on('progress', function (e) {
+	console.log(e.progress)
+})
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	var test = document.querySelectorAll('.test');
 	for (var i = 0; i < test.length; i++) {
 		createScrollspyElements(test[i]);
 	};
-	
-	setTimeout(function(){
-		scrollspy.flush();
-	}, 1000)
+
 	function createScrollspyElements(_htmlElement){
 		var scrollspyElement = scrollspy.add(_htmlElement);
 		var progressHTML = _htmlElement.querySelector('.progress');
@@ -1291,7 +1315,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			// v = scrollspy.map(_progress, 0.2, 0.8);
 			progressHTML.style.width = v * 100 + '%';
 			progressHTML.style.top = v * 100 + '%';
-			console.log(e.direction, v);
+			// console.log(e.direction, v);
 		});
 
 		// scrollspyElement.on('active', function(_el, _direction){
