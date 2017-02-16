@@ -1048,7 +1048,7 @@ function ScrollspyElement(opts){
 		/**
 		 * Calculates if element is at top of the window
 		 */
-		if(rect.top < attopOffset && rect.bottom > 0){
+		if(rect.top < attopOffset && rect.bottom > attopOffset){
 			atTopCtrl.alpha();
 		}else{
 			atTopCtrl.beta();
