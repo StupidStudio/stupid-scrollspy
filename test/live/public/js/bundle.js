@@ -707,7 +707,7 @@ function Scrollspy(opts){
     var self = {};
 
     /**
-     * @define {object} Options for the constructor 
+     * @define {object} Options for the constructor
      */
     var opts = opts || {};
 
@@ -854,17 +854,19 @@ function Scrollspy(opts){
 		var useCSS = options.useCSS != undefined ? options.useCSS : opts.useCSS;
 		var compensateTop = options.compensateTop != undefined ? options.compensateTop : opts.compensateTop;
 		var compensateBottom = options.compensateBottom != undefined ? options.compensateBottom : opts.compensateBottom;
+		var attopOffset = options.attopOffset != undefined ? options.attopOffset : opts.attopOffset;
 
 		var scrollspyElement = ScrollspyElement({
-			el:_HTMLElement, 
+			el:_HTMLElement,
 			useCSS: useCSS,
 			compensateTop: compensateTop,
-			compensateBottom: compensateBottom
+			compensateBottom: compensateBottom,
+            attopOffset: attopOffset
 		});
 
 		/** Adds the element to the collection */
 		Iterator.add(scrollspyElement, collection);
-		return scrollspyElement; 
+		return scrollspyElement;
 	}
 
 	/**
@@ -875,7 +877,7 @@ function Scrollspy(opts){
 		_scrollspyElement.destroy();
 	}
 
-	/** 
+	/**
 	 * Clean all elements from collection
 	 */
 	function flush () {
@@ -932,7 +934,7 @@ function ScrollspyElement(opts){
     var self = {};
 
     /**
-     * @define {object} Options for the constructor 
+     * @define {object} Options for the constructor
      */
     var opts = opts || {};
 
@@ -946,9 +948,15 @@ function ScrollspyElement(opts){
 	 */
 	var useCSS = opts.useCSS === true ? true : false;
 
+    /**
+	 * @define {boolean} attopOffset Number
+	 */
+	var attopOffset = opts.attopOffset || 0;
+
+
 	/**
 	 * @define {boolean} Compensate for top and bottom element
-	 */	
+	 */
 	var compensateTop = opts.compensateTop === true ? true : false;
 	var compensateBottom = opts.compensateBottom === true ? true : false;
 
@@ -1040,7 +1048,7 @@ function ScrollspyElement(opts){
 		/**
 		 * Calculates if element is at top of the window
 		 */
-		if(rect.top < 0 && rect.bottom > 0){
+		if(rect.top < attopOffset && rect.bottom > 0){
 			atTopCtrl.alpha();
 		}else{
 			atTopCtrl.beta();
@@ -1083,7 +1091,7 @@ function ScrollspyElement(opts){
 			if(compensateTop && t < 0){
 				x = (window.innerHeight - rect.top) + t;
 				y = (window.innerHeight + el.offsetHeight) + t;
-				
+
 			/**
 			 * If the element is in the bottom window
 			 * compensate for that
@@ -1105,7 +1113,7 @@ function ScrollspyElement(opts){
 
 			/** Trigger the event */
 			changed.trigger(z, progress);
-			
+
 		}
 	}
 
@@ -1127,7 +1135,7 @@ function ScrollspyElement(opts){
 			el: el,
 			direction: direction,
 			progress: _value
-		});	
+		});
 	}
 
 	/**
@@ -1142,33 +1150,33 @@ function ScrollspyElement(opts){
 	 * Adds classes to the element and trigger events
 	 */
 	function atTop(){
-		if(useCSS) el.classList.add('is-atTop');	
+		if(useCSS) el.classList.add('is-atTop');
 		event.trigger('atTop', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
 
 	function notAtTop(){
-		if(useCSS) el.classList.remove('is-atTop');	
+		if(useCSS) el.classList.remove('is-atTop');
 		event.trigger('notAtTop', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
 
 	function atBottom(){
-		if(useCSS) el.classList.add('is-atBottom');	
+		if(useCSS) el.classList.add('is-atBottom');
 		event.trigger('atBottom', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
 
 	function notAtBottom(){
-		if(useCSS) el.classList.remove('is-atBottom');	
+		if(useCSS) el.classList.remove('is-atBottom');
 		event.trigger('notAtBottom', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
@@ -1178,21 +1186,21 @@ function ScrollspyElement(opts){
 			el.classList.add('is-active');
 			removeCSSDirection();
 			addCSSDirection();
-		} 
+		}
 
 		event.trigger('active', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
 
 	function deactive(){
 		if(useCSS) {
-			el.classList.remove('is-active');	
+			el.classList.remove('is-active');
 			removeCSSDirection();
 		}
 		event.trigger('deactive', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
@@ -1204,7 +1212,7 @@ function ScrollspyElement(opts){
 			addCSSDirection();
 		}
 		event.trigger('visible', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
@@ -1216,7 +1224,7 @@ function ScrollspyElement(opts){
 			addCSSPosition();
 		}
 		event.trigger('hidden', {
-			el: el, 
+			el: el,
 			direction: direction
 		});
 	}
@@ -1286,21 +1294,23 @@ function ScrollspyElement(opts){
 }
 
 module.exports = Scrollspy;
+
 },{"stupid-callctrl":1,"stupid-changed":2,"stupid-event":3,"stupid-iterator":4}],8:[function(require,module,exports){
 var tick = require('../tick').getInstance();
 var ScrollSpy = require('../../scrollspy');
 var scrollspy = ScrollSpy({
-	tick: tick, 
+	tick: tick,
 	useCSS: true,
 	compensateTop: true,
-	compensateBottom: true
+	compensateBottom: true,
+	attopOffset: 100,
 });
-scrollspy.on('progress', function (e) {
-	console.log(e.progress)
-})
+// scrollspy.on('progress', function (e) {
+// 	console.log(e.progress)
+// })
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	var test = document.querySelectorAll('.test');
+	var test = document.querySelectorAll('.demo');
 	for (var i = 0; i < test.length; i++) {
 		createScrollspyElements(test[i]);
 	};
@@ -1348,6 +1358,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 
 });
+
 },{"../../scrollspy":7,"../tick":9}],9:[function(require,module,exports){
 var Singleton = require('stupid-singleton');
 var Tick = require('stupid-tick');

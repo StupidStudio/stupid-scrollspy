@@ -1,17 +1,18 @@
 var tick = require('../tick').getInstance();
 var ScrollSpy = require('../../scrollspy');
 var scrollspy = ScrollSpy({
-	tick: tick, 
+	tick: tick,
 	useCSS: true,
 	compensateTop: true,
-	compensateBottom: true
+	compensateBottom: true,
+	attopOffset: 100,
 });
-scrollspy.on('progress', function (e) {
-	console.log(e.progress)
-})
+// scrollspy.on('progress', function (e) {
+// 	console.log(e.progress)
+// })
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	var test = document.querySelectorAll('.test');
+	var test = document.querySelectorAll('.demo');
 	for (var i = 0; i < test.length; i++) {
 		createScrollspyElements(test[i]);
 	};
