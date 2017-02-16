@@ -1,6 +1,6 @@
 {
   "name": "stupid-scrollspy",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Another stupid scrollspy",
   "main": "./scrollspy.js",
   "directories": {
