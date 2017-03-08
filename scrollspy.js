@@ -67,6 +67,18 @@ function Scrollspy(opts){
 	 * Loop collection
 	 */
 	function loopCollection(){
+
+		/**
+		 *  Emit window scrollprogress
+		 */
+		var windowProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+		changed.trigger(windowProgress, function (value) {
+			event.trigger('progress', {
+				progress: value
+			})
+		})
+		
+
 		/**
 		 * If collection is empty dont loop
 		 */
@@ -137,15 +149,6 @@ function Scrollspy(opts){
 			prev = current;
 		}
 
-		/**
-		 *  Emit window scrollprogress
-		 */
-		var windowProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
-		changed.trigger(windowProgress, function (value) {
-			event.trigger('progress', {
-				progress: value
-			})
-		})
 	}
 
 	/**
