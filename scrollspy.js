@@ -602,5 +602,6 @@ function ScrollspyElement(opts){
 
 	return self;
 }
-
+window.stupid = window.stupid || {} 
+window.stupid.Scrollspy = Scrollspy
 module.exports = Scrollspy;

@@ -1081,7 +1081,8 @@ function ScrollspyElement(opts){
 
 	return self;
 }
-
+window.stupid = window.stupid || {} 
+window.stupid.Scrollspy = Scrollspy
 module.exports = Scrollspy;
 
 },{"stupid-callctrl":1,"stupid-changed":2,"stupid-event":3,"stupid-iterator":4}]},{},[5]);
