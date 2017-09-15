@@ -11,7 +11,7 @@ var browserify = 	require('browserify');
  */
 var settings = {
 	build: './dist',
-	source: './src'
+	source: './'
 };
 
 var liveTestSettings = {
@@ -34,6 +34,16 @@ gulp.task('live-test', function(){
 	.pipe(source('bundle.js'))
 	.pipe(buffer())
 	.pipe(gulp.dest(liveTestSettings.build + '/js'))
+	.pipe(livereload());
+});
+
+
+gulp.task('build', function(){
+	return watchify(browserify(settings.source + '/scrollspy.js')).bundle()
+	.on('error', function(err){ console.log(err.message); this.emit('end');})
+	.pipe(source('scrollspy.js'))
+	.pipe(buffer())
+	.pipe(gulp.dest(settings.build))
 	.pipe(livereload());
 });
 
